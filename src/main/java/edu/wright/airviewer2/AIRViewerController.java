@@ -200,24 +200,50 @@ public class AIRViewerController implements Initializable {
             
                 currentPageImageView.setOnDragDetected((MouseEvent event)->{
                     float x = (float) event.getX();
+                    System.out.println(AbstractDocumentCommandWrapper.getCommandNames());
+                    System.out.println("actual y : "+event.getY());
                     float flippedY = (float) currentPageImageView.getBoundsInParent().getHeight() - (float) event.getY();
-                    System.out.println("Mouse dragged X: " + x +" Y:"+flippedY);
+
                     PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, x, flippedY);
                     if (null != candidate) {
+                        System.out.println("boders lowx "+(candidate.getRectangle().getLowerLeftX()-x));
+                        System.out.println("boders lowy "+(candidate.getRectangle().getUpperRightY()-flippedY));
+                               
+                    model.executeDocumentCommandWithNameAndArgs("MoveAnnotation",
+                            new String[]{Integer.toString(pageIndex), x+"", 
+                                
+                                flippedY+"", "72.0", "72.0"});
 
+                    }
+                    System.out.println("bounds  : "+currentPageImageView);
+                    System.out.println("parent height  : "+currentPageImageView.getBoundsInParent().getHeight());
+                    System.out.println("Mouse dragged X: " + x +" Y:"+flippedY);
+//                    model.executeDocumentCommandWithNameAndArgs("MoveAnnotation",
+//                        new String[]{Integer.toString(pageIndex), x+"", flippedY+"", "72.0", "72.0"});
+                  //                    System.out.println("here with candidat "+candidate.getAnnotationName());
+//                    PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, x, flippedY);
+//                    if (null != candidate) {
+//
 //                        candidate.getRectangle().setLowerLeftX(x);
 //                        candidate.getRectangle().setLowerLeftX(flippedY);
-//                        model.getSelectedAnnotations().add(candidate);
-                model.undo();
-                model.executeDocumentCommandWithNameAndArgs("AddBoxAnnotation",
-                            new String[]{Integer.toString(pageIndex), x+"", flippedY+"", "72.0", "72.0"});
+//                        
+//                        model.executeDocumentCommandWithNameAndArgs(candidate.getAnnotationName(), new String[]{Integer.toString(pageIndex), x+"", flippedY+"", "72.0", "72.0"});
+////                    if(model!=null){
+//                            if (!event.isMetaDown() && !event.isShiftDown()) {
+//                                model.deselectAll();
+//                            }
+//                            model.extendSelectionOnPageAtPoint(pageIndex,
+//                                    x, flippedY);
+//                    }
+//                    model.undo();
+//                    model.executeDocumentCommandWithNameAndArgs("AddBoxAnnotation",
+//                            new String[]{Integer.toString(pageIndex), x+"", flippedY+"", "72.0", "72.0"});
+//                    System.out.println("here with candidat "+candidate.getAnnotationName());
+                    
                     refreshUserInterface();
-                        
-                        System.out.println("here with candidat "+candidate.toString());
-                        
 
-                    } else System.out.println("no candidate");
-              
+//                    } else System.out.println("no candidate");
+
                 });
             }
 

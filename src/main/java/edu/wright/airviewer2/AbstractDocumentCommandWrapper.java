@@ -90,6 +90,7 @@ public abstract class AbstractDocumentCommandWrapper {
     public void extendSelectionOnPageAtPoint(int pageIndex, float x, float y) {
         PDAnnotation candidate = getLastAnnotationOnPageAtPoint(pageIndex, x, y);
         if (null != candidate && !selectedAnnotations.contains(candidate)) {
+            System.out.println(selectedAnnotations.toArray());
             getSelectedAnnotations().add(candidate);
             System.out.println("Selected: " + selectedAnnotations.toString());
 
