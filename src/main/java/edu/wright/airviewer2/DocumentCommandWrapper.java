@@ -105,6 +105,12 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
                 return new DeleteSelectedAnnotationDocumentCommand(owner, args);
             }
         }, "DeleteSelectedAnnotation");
+        AbstractDocumentCommandWrapper.registerCommandClassWithName(new makeCommand() {
+            @Override
+            public AbstractDocumentCommand make(AbstractDocumentCommandWrapper owner, ArrayList<String> args) {
+                return new ResizeAnnotationDocumentCommand(owner, args);
+            }
+        }, "ResizeAnnotation");    
     }
 
     /**
@@ -416,7 +422,8 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
             }
 
             if (null != candidate) {
-
+                System.out.println("dx "+dx);
+                System.out.println("dy "+dy);
                 ArrayList<String> newArgs = new ArrayList<>(arguments);
                 newArgs.set(3, Float.toString(-dx));
                 newArgs.set(4, Float.toString(-dy));
@@ -660,6 +667,100 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
         public String getName() {
             return "Delete Annotation";
         }
+    }
+    
+    
+    /**
+     *
+     */
+    public class ResizeAnnotationDocumentCommand extends AbstractDocumentCommand {
+
+        /**
+         *
+         * @param anOwner
+         * @param args
+         */
+        public ResizeAnnotationDocumentCommand(AbstractDocumentCommandWrapper anOwner, ArrayList<String> args) {
+            super(anOwner, args);
+            assert 5 == args.size();
+        }
+
+        /**
+         *
+         * @param anOwner
+         * @param annotations
+         * @param args
+         */
+        public ResizeAnnotationDocumentCommand(AbstractDocumentCommandWrapper anOwner, List<PDAnnotation> annotations, ArrayList<String> args) {
+            super(anOwner, annotations, args);
+            assert 1 == annotations.size();
+            assert 5 == args.size();
+        }
+
+        /**
+         *
+         * @return If execute() succeeds, a Command that is the reciprocal of
+         * the receiver is returned. Otherwise, null is returned.
+         */
+        @Override
+        public AbstractDocumentCommand execute() {
+            AbstractDocumentCommand result = null;
+            PDAnnotation candidate = null;
+
+            assert 5 == arguments.size();
+
+            int pageNumber = parseInt(arguments.get(0));
+            float x = parseFloat(arguments.get(1));
+            float y = parseFloat(arguments.get(2));
+            float dx = parseFloat(arguments.get(3));
+            float dy = parseFloat(arguments.get(4));
+
+            if (null == annotations || 0 == annotations.size()) {
+                try {
+                    // We have to find the annotation to move
+                    PDPage page = owner.wrappedDocument.getPage(pageNumber);
+                    List<PDAnnotation> oldAnnotations = page.getAnnotations();
+                    candidate = owner.getLastAnnotationAtPoint(oldAnnotations, x, y);
+                } catch (IOException ex) {
+//                    Logger.getLogger(DocumentCommandWrapper.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                // We can just delete annotation
+                candidate = annotations.get(0);
+            }
+
+            if (null != candidate) {
+                System.out.println("dx "+dx);
+                System.out.println("dy "+dy);
+                ArrayList<String> newArgs = new ArrayList<>(arguments);
+                newArgs.set(3, Float.toString(-dx));
+                newArgs.set(4, Float.toString(-dy));
+                ArrayList<PDAnnotation> candidateList = new ArrayList<>();
+                candidateList.add(candidate);
+                result = new MoveAnnotationDocumentCommand(owner, candidateList, newArgs);
+
+                PDRectangle position = candidate.getRectangle();
+                position.setLowerLeftX(position.getLowerLeftX());
+                position.setLowerLeftY(position.getLowerLeftY());
+                position.setUpperRightX(position.getUpperRightX() + dx);
+                position.setUpperRightY(position.getUpperRightY() + dy);
+                candidate.setRectangle(position);
+            }
+
+            return result;
+        }
+
+        /**
+         *
+         * @return The name of the command as it will appear in a user interface
+         * for undo and redo operations e.g. "Undo Delete Annotation" where the
+         * string after "Undo " is returned from getName().
+         */
+        @Override
+        public String getName() {
+            return "Resize Annotation";
+        }
+
     }
 
 }

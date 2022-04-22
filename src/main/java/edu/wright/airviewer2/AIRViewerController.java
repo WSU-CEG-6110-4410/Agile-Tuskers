@@ -180,6 +180,7 @@ public class AIRViewerController implements Initializable {
                     @Override
                     public void handle(MouseEvent me) {
                         float flippedY = (float) currentPageImageView.getBoundsInParent().getHeight() - (float) me.getY();
+                        System.out.println("pressed Y: " + me.getY());
                         System.out.println("Mouse pressed X: " + me.getX()
                                 + " Y: " + Float.toString(flippedY));
 
@@ -200,23 +201,22 @@ public class AIRViewerController implements Initializable {
             
                 currentPageImageView.setOnDragDetected((MouseEvent event)->{
                     float x = (float) event.getX();
-                    System.out.println(AbstractDocumentCommandWrapper.getCommandNames());
                     System.out.println("actual y : "+event.getY());
                     float flippedY = (float) currentPageImageView.getBoundsInParent().getHeight() - (float) event.getY();
-
+                    System.out.println("flipped y : "+flippedY);
                     PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, x, flippedY);
                     if (null != candidate) {
-                        System.out.println("boders lowx "+(candidate.getRectangle().getLowerLeftX()-x));
-                        System.out.println("boders lowy "+(candidate.getRectangle().getUpperRightY()-flippedY));
-                               
-                    model.executeDocumentCommandWithNameAndArgs("MoveAnnotation",
-                            new String[]{Integer.toString(pageIndex), x+"", 
+                        System.out.println("boders lowx "+(candidate.getRectangle().getLowerLeftX()));
+                        System.out.println("boders lowy "+(candidate.getRectangle().getLowerLeftY()));
+                        System.out.println("flipped lowy "+( currentPageImageView.getBoundsInParent().getHeight() - (float) event.getY()-candidate.getRectangle().getLowerLeftY()));
+                        System.out.println(x+"-"+candidate.getRectangle().getLowerLeftX()+":"+
+                                flippedY+"-"+candidate.getRectangle().getLowerLeftY());
+                        model.executeDocumentCommandWithNameAndArgs("MoveAnnotation",
+                            new String[]{Integer.toString(pageIndex), candidate.getRectangle().getLowerLeftX()+"", 
                                 
-                                flippedY+"", "72.0", "72.0"});
+                                candidate.getRectangle().getLowerLeftY()+"", (x-candidate.getRectangle().getLowerLeftX())+"", (flippedY-candidate.getRectangle().getLowerLeftY())+""});
 
                     }
-                    System.out.println("bounds  : "+currentPageImageView);
-                    System.out.println("parent height  : "+currentPageImageView.getBoundsInParent().getHeight());
                     System.out.println("Mouse dragged X: " + x +" Y:"+flippedY);
 //                    model.executeDocumentCommandWithNameAndArgs("MoveAnnotation",
 //                        new String[]{Integer.toString(pageIndex), x+"", flippedY+"", "72.0", "72.0"});
@@ -239,11 +239,32 @@ public class AIRViewerController implements Initializable {
 //                    model.executeDocumentCommandWithNameAndArgs("AddBoxAnnotation",
 //                            new String[]{Integer.toString(pageIndex), x+"", flippedY+"", "72.0", "72.0"});
 //                    System.out.println("here with candidat "+candidate.getAnnotationName());
-                    
-                    refreshUserInterface();
+                 
 
 //                    } else System.out.println("no candidate");
+                refreshUserInterface();
 
+
+                });
+                   currentPageImageView.setOnMouseDragReleased((MouseEvent  e)->{
+                        System.out.print("mose realeased at "+e.getX()+" "+e.getY());
+                                            refreshUserInterface();
+
+                    });
+                   
+                currentPageImageView.setOnDragDone(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent me) {
+                    System.out.print("mouse drag dne at "+me.getX()+" "+me.getY());
+                                                   refreshUserInterface();
+                    }
+                });
+                currentPageImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent me) {
+                    System.out.print("mouaw ewlwAWS "+me.getX()+" "+me.getY());
+                                                   refreshUserInterface();
+                    }
                 });
             }
 
