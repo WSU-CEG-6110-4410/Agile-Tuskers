@@ -88,6 +88,11 @@ public class AIRViewerController implements Initializable {
 
     private Group pageImageGroup;
 
+      
+    private float originalX, originalY; // for tracking the original position of the mouse when it was first pressed
+    
+    private long lastClick;
+
     private AIRViewerModel promptLoadModel(String startPath) {
 
         AIRViewerModel loadedModel = null;
@@ -111,8 +116,7 @@ public class AIRViewerController implements Initializable {
 
         return loadedModel;
     }
-
-    private void synchronizeSelectionKnobs() {
+private void synchronizeSelectionKnobs() {
         if (null != model && null != currentPageImageView && null != pageImageGroup) {
             List<java.awt.Rectangle> selectedAreas = model.getSelectedAreas();
             ArrayList<Node> victims = new ArrayList<>(pageImageGroup.getChildren());
@@ -121,24 +125,85 @@ public class AIRViewerController implements Initializable {
             victims.stream().filter((n) -> (n != currentPageImageView)).forEach((n) -> {
                 pageImageGroup.getChildren().remove(n);
             });
+             int pageIndex = pagination.getCurrentPageIndex();
             
             // Add knobs to thegroup to indicate selection
             for (java.awt.Rectangle r : selectedAreas) {
+              
                 Circle knobA = new Circle(r.getX(),  (int)pageImageGroup.prefHeight(0) - r.getY(), 4);
                 knobA.setStroke(Color.YELLOW);
                 knobA.setStrokeWidth(2);
+                knobA.setOnMouseDragged(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent t) {
+                        System.out.print("Dragging Knobbing knob a");
+                        PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, (float) r.getX(), (float) r.getY());
+                        if(null != candidate){
+                         model.executeDocumentCommandWithNameAndArgs("ResizeAnnotation",
+                                              new String[]{Integer.toString(pageIndex), candidate.getRectangle().getLowerLeftX()+"",
+                                                  candidate.getRectangle().getLowerLeftY()+"", "90", "90"});
+                         refreshUserInterface();
+                        }
+                    }
+                
+                });
+
                 pageImageGroup.getChildren().add(knobA);
                 Circle knobB = new Circle(r.getX() + r.getWidth(), (int)pageImageGroup.prefHeight(0) - r.getY(), 4);
                 knobB.setStroke(Color.YELLOW);
                 knobB.setStrokeWidth(2);
+                knobB.setOnMouseDragged(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent t) {
+                      
+                        System.out.println("Dragging Knobbing knob b "+r.getX()+" "+r.getY());
+                        PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, (float) r.getX(), (float) r.getY());
+                        if(null != candidate){
+                         model.executeDocumentCommandWithNameAndArgs("ResizeAnnotation",
+                                              new String[]{Integer.toString(pageIndex), candidate.getRectangle().getLowerLeftX()+"",
+                                                  candidate.getRectangle().getLowerLeftY()+"", "90", "90"});
+                         refreshUserInterface();
+                        }
+                    }
+                
+                });
                 pageImageGroup.getChildren().add(knobB);
                 Circle knobC = new Circle(r.getX() + r.getWidth(),  (int)pageImageGroup.prefHeight(0) - (r.getY() + r.getHeight()), 4);
                 knobC.setStroke(Color.YELLOW);
                 knobC.setStrokeWidth(2);
+                knobC.setOnMouseDragged(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent t) {
+                      
+                        System.out.println("Dragging Knobbing knob b "+r.getX()+" "+r.getY());
+                        PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, (float) r.getX(), (float) r.getY());
+                        if(null != candidate){
+                         model.executeDocumentCommandWithNameAndArgs("ResizeAnnotation",
+                                              new String[]{Integer.toString(pageIndex), candidate.getRectangle().getLowerLeftX()+"",
+                                                  candidate.getRectangle().getLowerLeftY()+"", "90", "90"});
+                         refreshUserInterface();
+                        }
+                    }
+                
+                });
                 pageImageGroup.getChildren().add(knobC);
                 Circle knobD = new Circle(r.getX(),  (int)pageImageGroup.prefHeight(0) - (r.getY() + r.getHeight()), 4);
                 knobD.setStroke(Color.YELLOW);
-                knobD.setStrokeWidth(2);
+                knobD.setOnMouseDragged(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent t) {
+                      
+                        System.out.println("Dragging Knobbing knob b "+r.getX()+" "+r.getY());
+                        PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, (float) r.getX(), (float) r.getY());
+                        if(null != candidate){
+                         model.executeDocumentCommandWithNameAndArgs("ResizeAnnotation",
+                                              new String[]{Integer.toString(pageIndex), candidate.getRectangle().getLowerLeftX()+"",
+                                                  candidate.getRectangle().getLowerLeftY()+"", "90", "90"});
+                         refreshUserInterface();
+                        }
+                    }
+                
+                });
                 pageImageGroup.getChildren().add(knobD);
             }
         }
@@ -172,21 +237,44 @@ public class AIRViewerController implements Initializable {
             addEllipseAnnotationMenuItem.setDisable(false);
             addTextAnnotationMenuItem.setDisable(false);
             deleteAnnotationMenuItem.setDisable(0 >= model.getSelectionSize());
-
             if (null != currentPageImageView) {
                 int pageIndex = pagination.getCurrentPageIndex();
                 currentPageImageView.setImage(model.getImage(pageIndex));
                 currentPageImageView.setOnMousePressed(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent me) {
+                        long currentClick = System.currentTimeMillis();
+                        boolean isDoubleClick = false;
+                        long diff=0;
+                        if(currentClick!=0 && lastClick != 0)
+                            diff = currentClick - lastClick;
+                        
+                        if(diff<1000)
+                            isDoubleClick = true;
+                        
                         float flippedY = (float) currentPageImageView.getBoundsInParent().getHeight() - (float) me.getY();
-                        System.out.println("pressed Y: " + me.getY());
-                        System.out.println("Mouse pressed X: " + me.getX()
-                                + " Y: " + Float.toString(flippedY));
+
+                        PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, (float) me.getX(), 
+                              flippedY);
+                        
+                        
+                        if(isDoubleClick && null != candidate)
+                        {
+                           candidate.setContents("");
+                           model.executeDocumentCommandWithNameAndArgs("DeleteSelectedAnnotation",
+                            new String[]{Integer.toString(pageIndex)});
+                           model.executeDocumentCommandWithNameAndArgs("AddTextAnnotation",
+                            new String[]{Integer.toString(pageIndex), "36", "576", "144.0", "19.0", "We are about to edit this text"});
+                          
+                        }
+                        isDoubleClick = false;
+                        lastClick = currentClick;
+                   
 
                         float xInPage = (float) me.getX();
                         float yInPage = flippedY;
-
+                        originalX = xInPage;
+                        originalY = yInPage;
                         if (null != model) {
                             int pageIndex = pagination.getCurrentPageIndex();
                             if (!me.isMetaDown() && !me.isShiftDown()) {
@@ -199,75 +287,44 @@ public class AIRViewerController implements Initializable {
                     }
                 });
             
-                currentPageImageView.setOnDragDetected((MouseEvent event)->{
-                    float x = (float) event.getX();
-                    System.out.println("actual y : "+event.getY());
-                    float flippedY = (float) currentPageImageView.getBoundsInParent().getHeight() - (float) event.getY();
-                    System.out.println("flipped y : "+flippedY);
-                    PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, x, flippedY);
-                    if (null != candidate) {
-                        System.out.println("boders lowx "+(candidate.getRectangle().getLowerLeftX()));
-                        System.out.println("boders lowy "+(candidate.getRectangle().getLowerLeftY()));
-                        System.out.println("flipped lowy "+( currentPageImageView.getBoundsInParent().getHeight() - (float) event.getY()-candidate.getRectangle().getLowerLeftY()));
-                        System.out.println(x+"-"+candidate.getRectangle().getLowerLeftX()+":"+
-                                flippedY+"-"+candidate.getRectangle().getLowerLeftY());
-                        model.executeDocumentCommandWithNameAndArgs("MoveAnnotation",
-                            new String[]{Integer.toString(pageIndex), candidate.getRectangle().getLowerLeftX()+"", 
-                                
-                                candidate.getRectangle().getLowerLeftY()+"", (x-candidate.getRectangle().getLowerLeftX())+"", (flippedY-candidate.getRectangle().getLowerLeftY())+""});
-
-                    }
-                    System.out.println("Mouse dragged X: " + x +" Y:"+flippedY);
-//                    model.executeDocumentCommandWithNameAndArgs("MoveAnnotation",
-//                        new String[]{Integer.toString(pageIndex), x+"", flippedY+"", "72.0", "72.0"});
-                  //                    System.out.println("here with candidat "+candidate.getAnnotationName());
-//                    PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, x, flippedY);
-//                    if (null != candidate) {
-//
-//                        candidate.getRectangle().setLowerLeftX(x);
-//                        candidate.getRectangle().setLowerLeftX(flippedY);
-//                        
-//                        model.executeDocumentCommandWithNameAndArgs(candidate.getAnnotationName(), new String[]{Integer.toString(pageIndex), x+"", flippedY+"", "72.0", "72.0"});
-////                    if(model!=null){
-//                            if (!event.isMetaDown() && !event.isShiftDown()) {
-//                                model.deselectAll();
-//                            }
-//                            model.extendSelectionOnPageAtPoint(pageIndex,
-//                                    x, flippedY);
-//                    }
-//                    model.undo();
-//                    model.executeDocumentCommandWithNameAndArgs("AddBoxAnnotation",
-//                            new String[]{Integer.toString(pageIndex), x+"", flippedY+"", "72.0", "72.0"});
-//                    System.out.println("here with candidat "+candidate.getAnnotationName());
-                 
-
-//                    } else System.out.println("no candidate");
-                refreshUserInterface();
-
-
-                });
-                   currentPageImageView.setOnMouseDragReleased((MouseEvent  e)->{
-                        System.out.print("mose realeased at "+e.getX()+" "+e.getY());
-                                            refreshUserInterface();
-
-                    });
-                   
-                currentPageImageView.setOnDragDone(new EventHandler<DragEvent>() {
+               
+                /*
+                * Listen to a mouseDragged event occuring inside an Annotation and move the annotation according to the event
+                * X and Y coordinates. 
+                */
+                
+                currentPageImageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
                     @Override
-                    public void handle(DragEvent me) {
-                    System.out.print("mouse drag dne at "+me.getX()+" "+me.getY());
-                                                   refreshUserInterface();
-                    }
+                    public void handle(MouseEvent me) {
+                      float x = (float) me.getX();
+                      float flippedY = (float) currentPageImageView.getBoundsInParent().getHeight() - (float) me.getY();
+                      PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, originalX, 
+                              originalY);
+                   
+                      if (null != candidate) {
+                        model.executeDocumentCommandWithNameAndArgs("MoveAnnotation",
+                        new String[]{Integer.toString(pageIndex), candidate.getRectangle().getLowerLeftX()+"", 
+                            candidate.getRectangle().getLowerLeftY()+"", (x-candidate.getRectangle().getLowerLeftX())+"", (flippedY-candidate.getRectangle().getLowerLeftY())+""});
+
+                      }
+                        
+                      refreshUserInterface();
+
+                      }
+                    
                 });
+
+               // Get the mouse position when it is released 
                 currentPageImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent me) {
-                    System.out.print("mouaw ewlwAWS "+me.getX()+" "+me.getY());
-                                                   refreshUserInterface();
+                        
+                        originalX = (float) me.getX();
+                        originalY = (float) currentPageImageView.getBoundsInParent().getHeight()-(float) me.getY();
+                        refreshUserInterface();
                     }
                 });
             }
-
 
             synchronizeSelectionKnobs();
 
@@ -351,6 +408,12 @@ public class AIRViewerController implements Initializable {
             });
             extractTextMenuItem.setOnAction((ActionEvent e) -> {
                 System.out.println("extractTextMenuItem ...");
+                int pageIndex = pagination.getCurrentPageIndex();
+                PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, originalX, 
+                            originalY);
+                if (null != candidate) {
+                      System.out.println(candidate.getContents());
+                }
             });
             undoMenuItem.setOnAction((ActionEvent e) -> {
                 model.undo();

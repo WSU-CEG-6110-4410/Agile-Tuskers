@@ -11,13 +11,17 @@ edu/wright/airviewer2/AIRViewerModel.class
 edu/wright/airviewer2/DocumentCommandWrapper$2.class
 edu/wright/airviewer2/AIRViewer.class
 module-info.class
+edu/wright/airviewer2/DocumentCommandWrapper$9.class
 edu/wright/airviewer2/DocumentCommandWrapper$7.class
 edu/wright/airviewer2/DocumentCommandWrapper$ReplaceAnnotationDocumentCommand.class
+edu/wright/airviewer2/AIRViewerController$7.class
 edu/wright/airviewer2/DocumentCommandWrapper$4.class
 edu/wright/airviewer2/AbstractDocumentCommandWrapper$AbstractDocumentCommand.class
 edu/wright/airviewer2/AIRViewerController$2.class
+edu/wright/airviewer2/AIRViewerController$6.class
 edu/wright/airviewer2/DocumentCommandWrapper$1.class
 edu/wright/airviewer2/AIRViewerController$4.class
+edu/wright/airviewer2/DocumentCommandWrapper$ResizeAnnotationDocumentCommand.class
 edu/wright/airviewer2/EllipseAnnotationMaker.class
 edu/wright/airviewer2/DocumentCommandWrapper$6.class
 edu/wright/airviewer2/BoxAnnotationMaker.class
