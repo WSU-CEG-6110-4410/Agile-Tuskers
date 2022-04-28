@@ -124,13 +124,13 @@ private void synchronizeSelectionKnobs() {
             List<java.awt.Rectangle> selectedAreas = model.getSelectedAreas();
             ArrayList<Node> victims = new ArrayList<>(pageImageGroup.getChildren());
             
-            // Delete everything in the group that isn't currentPageImageView
+            /// This function is used to delete everything in the group that isn't currentPageImageView
             victims.stream().filter((n) -> (n != currentPageImageView)).forEach((n) -> {
                 pageImageGroup.getChildren().remove(n);
             });
              int pageIndex = pagination.getCurrentPageIndex();
             
-            // Add knobs to thegroup to indicate selection
+            /// This function is used to add knobs to thegroup to indicate selection 
             for (java.awt.Rectangle r : selectedAreas) {
               
                 Circle knobA = new Circle(r.getX(),  (int)pageImageGroup.prefHeight(0) - r.getY(), 4);
