@@ -63,7 +63,8 @@ public class AIRViewer extends Application {
 
         Pattern pattern = Pattern.compile(regex);
         BufferedReader br = new BufferedReader(new FileReader(args[0]));
-
+     /// This function is used to resize container which will strech to fill available area
+     ///https://github.com/WSU-CEG-6110-4410/Agile-Tuskers/issues/12
         DocumentCommandWrapper commandDocument = DocumentCommandWrapper.loadDosumentAtPath(args[1]);
         String line;
         while ((line = br.readLine()) != null) {
