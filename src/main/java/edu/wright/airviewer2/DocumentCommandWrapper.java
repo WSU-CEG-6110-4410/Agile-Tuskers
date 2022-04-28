@@ -719,7 +719,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
 
             if (null == annotations || 0 == annotations.size()) {
                 try {
-                    // We have to find the annotation to move
+                    ///Here We have to find the annotation to move
                     PDPage page = owner.wrappedDocument.getPage(pageNumber);
                     List<PDAnnotation> oldAnnotations = page.getAnnotations();
                     candidate = owner.getLastAnnotationAtPoint(oldAnnotations, x, y);
@@ -727,7 +727,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
 //                    Logger.getLogger(DocumentCommandWrapper.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                // We can just delete annotation
+                /// This function is used to delete annotation 
                 candidate = annotations.get(0);
             }
 
@@ -740,6 +740,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
                 ArrayList<PDAnnotation> candidateList = new ArrayList<>();
                 candidateList.add(candidate);
                 result = new MoveAnnotationDocumentCommand(owner, candidateList, newArgs);
+                /// This function retains the same dimensions(height/width)
                 PDRectangle position = candidate.getRectangle();
                 position.setLowerLeftX(position.getLowerLeftX());
                 position.setLowerLeftY(position.getLowerLeftY());
