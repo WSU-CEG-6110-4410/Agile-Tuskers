@@ -105,6 +105,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
                 return new DeleteSelectedAnnotationDocumentCommand(owner, args);
             }
         }, "DeleteSelectedAnnotation");
+        /// This function is used to convert primitive into object and object into primitive.
         AbstractDocumentCommandWrapper.registerCommandClassWithName(new makeCommand() {
             @Override
             public AbstractDocumentCommand make(AbstractDocumentCommandWrapper owner, ArrayList<String> args) {
@@ -680,6 +681,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * @param anOwner
          * @param args
          */
+        /// This function is used to resize annotations for document command
         public ResizeAnnotationDocumentCommand(AbstractDocumentCommandWrapper anOwner, ArrayList<String> args) {
             super(anOwner, args);
             assert 5 == args.size();
@@ -738,7 +740,6 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
                 ArrayList<PDAnnotation> candidateList = new ArrayList<>();
                 candidateList.add(candidate);
                 result = new MoveAnnotationDocumentCommand(owner, candidateList, newArgs);
-
                 PDRectangle position = candidate.getRectangle();
                 position.setLowerLeftX(position.getLowerLeftX());
                 position.setLowerLeftY(position.getLowerLeftY());
