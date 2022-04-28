@@ -240,6 +240,7 @@ private void synchronizeSelectionKnobs() {
 
             if (null != currentPageImageView) {
                 int pageIndex = pagination.getCurrentPageIndex();
+                /// This function is used for painting images loaded with Image class
                 currentPageImageView.setImage(model.getImage(pageIndex));
                 currentPageImageView.setOnMousePressed(new EventHandler<MouseEvent>() {
                     @Override
@@ -265,7 +266,7 @@ private void synchronizeSelectionKnobs() {
                         }
                     }
                 });
-            
+                /// This function is used for painting images loaded with image class        
                 currentPageImageView.setOnDragDetected((MouseEvent event)->{
                     float x = (float) event.getX();
                     System.out.println("actual y : "+event.getY());
@@ -339,6 +340,7 @@ private void synchronizeSelectionKnobs() {
             synchronizeSelectionKnobs();
 
         } else {
+            /// This function enables the user to navigate page by page through content
             pagination.setPageCount(0);
             pagination.setPageFactory(index -> {
                 if (null == pageImageGroup) {
@@ -350,13 +352,21 @@ private void synchronizeSelectionKnobs() {
                 return pageImageGroup;
             });
             pagination.setDisable(true);
+            /// By using this function users can select one menu item at time. After a user clicks an item, the menu returns to the hidden mode
+            ///https://github.com/WSU-CEG-6110-4410/Agile-Tuskers/issues/12
             saveAsMenuItem.setDisable(true);
+            ///This function has a display text property and serves as the base class for the bulk of JavaFX menus API
             extractTextMenuItem.setDisable(true);
+            /// This function is intended to be used in conjunction with Menu to provide options to users
             undoMenuItem.setDisable(true);
+            ///This function is specifically designed for use within a Menu
             redoMenuItem.setDisable(true);
             addBoxAnnotationMenuItem.setDisable(true);
+            /// This function is used for adding ellipse annotation to the menuitem
             addEllipseAnnotationMenuItem.setDisable(true);
+            /// This function is used for adding text annotation to the menuitem
             addTextAnnotationMenuItem.setDisable(true);
+            /// This function is used for deleting annotation to the menuitem
             deleteAnnotationMenuItem.setDisable(true);
 
         }
