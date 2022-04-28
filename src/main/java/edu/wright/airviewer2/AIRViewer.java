@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
 /**
  * JavaFX AIRViewer
  */
+/// https://github.com/WSU-CEG-6110-4410/Agile-Tuskers/issues/5
+/// https://github.com/WSU-CEG-6110-4410/Agile-Tuskers/issues/8
+/// https://examples.javacodegeeks.com/desktop-java/javafx/fxml/javafx-fxml-controller-example/
 public class AIRViewer extends Application {
 
     private static Stage primaryStage;
