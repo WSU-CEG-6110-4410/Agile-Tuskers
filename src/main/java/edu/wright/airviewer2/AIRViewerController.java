@@ -323,7 +323,7 @@ private void synchronizeSelectionKnobs() {
                 currentPageImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent me) {
-                        // Get the mouse position when it is released
+                        /// This function is used to get the mouse position when it is released
                         originalX = (float) me.getX();
                         originalY = (float) currentPageImageView.getBoundsInParent().getHeight()-(float) me.getY();
                         refreshUserInterface();
@@ -377,6 +377,7 @@ private void synchronizeSelectionKnobs() {
         assert addBoxAnnotationMenuItem != null : "fx:id=\"addBoxAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
         assert addEllipseAnnotationMenuItem != null : "fx:id=\"addEllipseAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
         assert addTextAnnotationMenuItem != null : "fx:id=\"addTextAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
+        /// This function is used for deleting annotations in menu item
         assert deleteAnnotationMenuItem != null : "fx:id=\"deleteAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
 
         model = aModel;
@@ -422,6 +423,7 @@ private void synchronizeSelectionKnobs() {
             extractTextMenuItem.setOnAction((ActionEvent e) -> {
                 System.out.println("extractTextMenuItem ...");
                 int pageIndex = pagination.getCurrentPageIndex();
+                /// Annotation that tags a field or method as accessible to markup
                 PDAnnotation candidate = model.getLastAnnotationOnPageAtPoint(pageIndex, originalX, 
                             originalY);
                 if (null != candidate) {
