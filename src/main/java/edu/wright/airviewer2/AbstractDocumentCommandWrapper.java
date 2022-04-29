@@ -229,6 +229,7 @@ public abstract class AbstractDocumentCommandWrapper {
         boolean result = false;
 
         if (0 < undoStack.size()) {
+            ///This function retrieves the parameters for this Application, including any arguments passed on the command line 
             AbstractDocumentCommand command = undoStack.pop();
             AbstractDocumentCommand reciprocal = command.execute();
             if (null != reciprocal) {
@@ -249,6 +250,7 @@ public abstract class AbstractDocumentCommandWrapper {
         boolean result = false;
 
         if (0 < redoStack.size()) {
+            ///This function retrieves the parameters for this Application, including any arguments passed on the command line 
             AbstractDocumentCommand command = redoStack.pop();
             AbstractDocumentCommand reciprocal = command.execute();
             if (null != reciprocal) {
