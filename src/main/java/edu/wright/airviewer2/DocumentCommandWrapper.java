@@ -288,6 +288,8 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
         public AbstractDocumentCommand execute() {
             AbstractDocumentCommand result = null;
 
+         ///@invariant
+         //@Requires
             assert null != arguments && arguments.size() == 6;
             List<PDAnnotation> previousAnnotations = TextAnnotationMaker.make(owner.wrappedDocument, arguments);
             result = new ReplaceAnnotationDocumentCommand(owner, previousAnnotations, arguments);
@@ -488,7 +490,9 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * @return If execute() succeeds, a Command that is the reciprocal of
          * the receiver is returned. Otherwise, null is returned.
          */
+        //@invariant
         @Override
+        //@requires
         public AbstractDocumentCommand execute() {
             assert null != annotations && 1 == annotations.size();
             assert null != arguments && 0 < arguments.size();
@@ -507,6 +511,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
 
             return result;
         }
+        // ******************end of program by contract***************//
 
         /**
          *
@@ -592,6 +597,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * the receiver is returned. Otherwise, null is returned.
          */
         @Override
+        //***************pre condition programming by contract********************//
         public AbstractDocumentCommand execute() {
             assert null != arguments && 1 == arguments.size();
 
@@ -605,7 +611,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
 
             return null; // Prevent "Save" item on undo stack
         }
-
+        //**************************post condition programming contract/****************/
         /**
          *
          * @return The name of the command as it will appear in a user interface
@@ -618,7 +624,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
         }
 
     }
-
+    // *********************end of programming by contract******************//
     /**
      * Instances of this class encapsulate commands to annotate PDF documents
      * encapsulated by deleting an existing annotation.
@@ -640,6 +646,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * the receiver is returned. Otherwise, null is returned.
          */
         @Override
+        //***************** pre condition programming by contract ****************//
         public AbstractDocumentCommand execute() {
             assert 0 < arguments.size();
 
@@ -660,6 +667,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
                         if (null != itemsToRemove) {
                             for (PDAnnotation pa : itemsToRemove) {
                                 oldAnnotations.remove(pa);
+                                //***************** post condition programming by contract********************//
                             }
                         }
                     }
@@ -673,6 +681,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
 
             return result;
         }
+        //**********************end of programming by contract******************//
 
         /**
          *
@@ -720,6 +729,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * @return If execute() succeeds, a Command that is the reciprocal of
          * the receiver is returned. Otherwise, null is returned.
          */
+        //******************pre condition programming by contract****************//
         @Override
         public AbstractDocumentCommand execute() {
             AbstractDocumentCommand result = null;
@@ -732,6 +742,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
             float y = parseFloat(arguments.get(2));
             float dx = parseFloat(arguments.get(3));
             float dy = parseFloat(arguments.get(4));
+            //*****************post condition programming by contract*****************//
 
             if (null == annotations || 0 == annotations.size()) {
                 try {
@@ -746,6 +757,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
                 /// This function is used to delete annotation 
                 candidate = annotations.get(0);
             }
+            //*****************end of programming by contract******************//
 
             if (null != candidate) {
                 System.out.println("dx "+dx);
