@@ -324,6 +324,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * the receiver is returned. Otherwise, null is returned.
          */
         @Override
+        //****************************pre-condition programming by contract***********//
         public AbstractDocumentCommand execute() {
             assert 3 == arguments.size();
 
@@ -344,13 +345,14 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
                     oldAnnotations.remove(victim);
                     page.setAnnotations(oldAnnotations);
                 }
+                //****************************post-condition programming by contract***********//
             } catch (IOException ex) {
 //                Logger.getLogger(DocumentCommandWrapper.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             return result;
         }
-
+         //**************************end of programming by contract************//
         /**
          *
          * @return The name of the command as it will appear in a user interface
