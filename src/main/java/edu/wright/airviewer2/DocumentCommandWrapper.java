@@ -323,6 +323,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * the receiver is returned. Otherwise, null is returned.
          */
         @Override
+        //****************************pre-condition programming by contract***********//
         public AbstractDocumentCommand execute() {
             assert 3 == arguments.size();
 
@@ -342,6 +343,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
                     result = new ReplaceAnnotationDocumentCommand(owner, new ArrayList<>(oldAnnotations), arguments);
                     oldAnnotations.remove(victim);
                     page.setAnnotations(oldAnnotations);
+                    // *****************************post-condition programming by contract**********//
                 }
             } catch (IOException ex) {
 //                Logger.getLogger(DocumentCommandWrapper.class.getName()).log(Level.SEVERE, null, ex);
@@ -349,6 +351,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
 
             return result;
         }
+        //**************************end of programming by contract************//
 
         /**
          *

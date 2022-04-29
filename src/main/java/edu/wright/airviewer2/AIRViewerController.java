@@ -212,7 +212,7 @@ private void synchronizeSelectionKnobs() {
         }
 
     }
-
+    //****************************pre-condition programming by contract***********//
     private void refreshUserInterface() {
         assert pagination != null : "fx:id=\"pagination\" was not injected: check your FXML file 'simple.fxml'.";
         assert openMenuItem != null : "fx:id=\"openMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
@@ -226,6 +226,7 @@ private void synchronizeSelectionKnobs() {
         assert addEllipseAnnotationMenuItem != null : "fx:id=\"addEllipseAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
         assert addTextAnnotationMenuItem != null : "fx:id=\"addTextAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
         assert deleteAnnotationMenuItem != null : "fx:id=\"deleteAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
+        // *****************************post-condition programming by contract**********//
 
         if (null != model) {
             pagination.setPageCount(model.numPages());
@@ -240,6 +241,7 @@ private void synchronizeSelectionKnobs() {
             addEllipseAnnotationMenuItem.setDisable(false);
             addTextAnnotationMenuItem.setDisable(false);
             deleteAnnotationMenuItem.setDisable(0 >= model.getSelectionSize());
+            //**************************end of programming by contract************//
             if (null != currentPageImageView) {
                 int pageIndex = pagination.getCurrentPageIndex();
                 /// This function is used for painting images loaded with Image class
@@ -364,7 +366,7 @@ private void synchronizeSelectionKnobs() {
 
         }
     }
-
+      //****************************pre-condition programming by contract***********//
     private AIRViewerModel reinitializeWithModel(AIRViewerModel aModel) {
         assert pagination != null : "fx:id=\"pagination\" was not injected: check your FXML file 'simple.fxml'.";
         assert openMenuItem != null : "fx:id=\"openMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
@@ -378,7 +380,7 @@ private void synchronizeSelectionKnobs() {
         assert addEllipseAnnotationMenuItem != null : "fx:id=\"addEllipseAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
         assert addTextAnnotationMenuItem != null : "fx:id=\"addTextAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
         assert deleteAnnotationMenuItem != null : "fx:id=\"deleteAnnotationMenuItem\" was not injected: check your FXML file 'simple.fxml'.";
-
+        // *****************************post-condition programming by contract**********//
         model = aModel;
 
         openMenuItem.setOnAction((ActionEvent e) -> {
@@ -492,3 +494,4 @@ private void synchronizeSelectionKnobs() {
     }
 
 }
+//**************************end of programming by contract************//
