@@ -193,16 +193,18 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * the receiver is returned. Otherwise, null is returned.
          */
         @Override
+        //****************************pre-condition programming by contract***********//
         public AbstractDocumentCommand execute() {
             AbstractDocumentCommand result = null;
 
             assert null != arguments && arguments.size() == 5;
             List<PDAnnotation> previousAnnotations = BoxAnnotationMaker.make(owner.wrappedDocument, arguments);
             result = new ReplaceAnnotationDocumentCommand(owner, previousAnnotations, arguments);
+            // *****************************post-condition programming by contract**********//
 
             return result;
         }
-
+        //**************************end of programming by contract************//
         /**
          *
          * @return The name of the command as it will appear in a user interface
