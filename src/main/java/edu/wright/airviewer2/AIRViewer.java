@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 /**
  * JavaFX AIRViewer
  */
+/// https://github.com/WSU-CEG-6110-4410/Agile-Tuskers/issues/5
+/// https://github.com/WSU-CEG-6110-4410/Agile-Tuskers/issues/8
+/// https://examples.javacodegeeks.com/desktop-java/javafx/fxml/javafx-fxml-controller-example/
 public class AIRViewer extends Application {
 
     private static Stage primaryStage;
@@ -60,6 +62,9 @@ public class AIRViewer extends Application {
 
         Pattern pattern = Pattern.compile(regex);
         BufferedReader br = new BufferedReader(new FileReader(args[0]));
+        /// This function is used to resize container which will strech to fill available area
+       ///https://github.com/WSU-CEG-6110-4410/Agile-Tuskers/issues/12
+
 
         DocumentCommandWrapper commandDocument = DocumentCommandWrapper.loadDosumentAtPath(args[1]);
         String line;
