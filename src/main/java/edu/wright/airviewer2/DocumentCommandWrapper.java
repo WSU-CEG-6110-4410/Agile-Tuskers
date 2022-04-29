@@ -249,6 +249,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
 
             return result;
         }
+        ///This command is used for undo and redo operations 
 
         /**
          *
@@ -273,6 +274,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * @param anOwner
          * @param args
          */
+        /// This function is used for adding text annotations to the document
         public AddTextAnnotationDocumentCommand(AbstractDocumentCommandWrapper anOwner, ArrayList<String> args) {
             super(anOwner, args);
         }
@@ -299,6 +301,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * for undo and redo operations e.g. "Undo Delete Annotation" where the
          * string after "Undo " is returned from getName().
          */
+        ///This annotation informs the compiler that the element is meant to override an element declared in a superclass
         @Override
         public String getName() {
             return "Add Text Annotation";
@@ -309,6 +312,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
      * Instances of this class encapsulate commands to annotate PDF documents
      * encapsulated by deleting an existing annotation.
      */
+    /// This class is used for deleting annotations in the document 
     public class DeleteAnnotationDocumentCommand extends AbstractDocumentCommand {
 
         /**
@@ -325,6 +329,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * @return If execute() succeeds, a Command that is the reciprocal of
          * the receiver is returned. Otherwise, null is returned.
          */
+        ///This annotation informs the compiler that the element is meant to override an element declared in a superclass
         @Override
         //****************************pre-condition programming by contract***********//
         public AbstractDocumentCommand execute() {
