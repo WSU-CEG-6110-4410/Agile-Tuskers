@@ -400,6 +400,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * the receiver is returned. Otherwise, null is returned.
          */
         @Override
+         //****************************pre-condition programming by contract***********//
         public AbstractDocumentCommand execute() {
             AbstractDocumentCommand result = null;
             PDAnnotation candidate = null;
@@ -411,6 +412,8 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
             float y = parseFloat(arguments.get(2));
             float dx = parseFloat(arguments.get(3));
             float dy = parseFloat(arguments.get(4));
+             // *****************************post-condition programming by contract**********//
+
 
             if (null == annotations || 0 == annotations.size()) {
                 try {
@@ -425,7 +428,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
                 // We can just delete annotation
                 candidate = annotations.get(0);
             }
-
+             //**************************end of programming by contract************//
             if (null != candidate) {
                 System.out.println("dx "+dx);
                 System.out.println("dy "+dy);
@@ -534,6 +537,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
          * the receiver is returned. Otherwise, null is returned.
          */
         @Override
+        //****************************pre-condition programming by contract***********//
         public AbstractDocumentCommand execute() {
             assert null != arguments && 1 == arguments.size();
 
@@ -545,6 +549,8 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
 
             return null; // Prevent "Save" item on undo stack
         }
+        // *****************************post-condition programming by contract**********//
+
 
         /**
          *
@@ -558,6 +564,7 @@ public class DocumentCommandWrapper extends AbstractDocumentCommandWrapper {
         }
 
     }
+    //**************************end of programming by contract************//
 
     /**
      *
